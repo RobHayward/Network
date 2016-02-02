@@ -1,4 +1,5 @@
 #Some notes on the network session at London R
+
 #dougmet - git hub. 
 # igraph (Gabor) and statnet (statistical parts) are the two main packages. 
 require(igraph)
@@ -26,7 +27,7 @@ graph_from_adjacency_matrix(A)
 as_edgelist(g)
 # two column matrix is back
 #--------------------
-#Treen network (no loops)
+#Tree network (no loops)
 g <- make_tree(10, children = 2, mode =  "in")
 plot(g)
 # trees important
@@ -40,8 +41,7 @@ plot(g)
 g <- make_star(n = 5)
 plot(g)
 as_edgelist(g)
-as_adjacency_matrix(g, sparce = FALSE)
-# This does not work above.  Why? 
+as_adjacency_matrix(g)
 
 # Networds from data frames
 dolphineEdges <- read.csv("Data/dolphin_edges.csv")
@@ -64,7 +64,7 @@ dolphin
 # network can be truned into a data frame as_dataframe. 
 dolphinesDF <- as_data_frame(dolphin, what = "both")
 head(dolphinesDF)
-# as to csv and export. 
+# add to csv and export. 
 # Can be exported to other formats.
 #Network manipulation--------------------------------------------
 #Looking at the atributes, adding virtices
@@ -80,8 +80,8 @@ USairports
 View(as_data_frame(USairports, what = "edges"))
 # different types of attribute
 vertex_attr_names(USairports)
-vertex.attr(USairports, "City")
-edge.attributes(USairports, "name")
+vertex_attr(USairports, "City")
+edge_attr(USairports, "name")
 # Vertex seldctor function
 # access the attributes
 V(USairports)$City

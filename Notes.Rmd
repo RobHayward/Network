@@ -5,3 +5,90 @@ date: "26 January 2016"
 output: html_document
 ---
 
+#Introduction
+Networks are everywhere.  There are connections called *edges* between *nodes* or *vertices*.  The edges can be *directed* or not. There are two main packages: `igraph`, the work of Gabor Casrdi, and `statnet` package from the University of Washington. 
+
+##Representation
+Matrices can be used to represent networks
+```{r} 
+A <- rbind(c(0,1,0), c(1,0,1), c(2,0,0))
+nodeNames <- c("A", "B", "C")
+dimnames(A) <- list(nodeNames, nodeNames)
+A
+```
+Where the row are from a node and the columns are to a node. 
+
+An alternative is to use an *edge list* representation. 
+
+However, the `igraph` package has its own efficient internal representation. This is most easily used by using the function `graph_from_literal`
+
+```{r, message=FALSE, warning=FALSE}
+library(igraph)
+g <- graph_from_literal(A++B, B-+C, C-+A)
+g
+```
+It has efficient internal stricture.  The output indicates that it is directed (D), it is named (N) and that it has 3 nodes and 4 edges. 
+```{r, warning=FALSE, message=FALSE,fig.height=4.6}
+plot(g)
+```
+
+igraph objects can also be made with 
+
+* edge lists `g <- graph_from_edgelist(el, directed = TRUE)`
+* data frames `g <- graph_from_data_frame(df, directed = TRUE)`
+* adjecency matrix `g <- graph_from_adjacency_matrix(A)`
+
+## From graph to matrix form
+It is possible move back from the graph to the matrix form 
+
+###Adjacency matrix
+
+```{r, warning=FALSE, message=FALSE, fig.height=4.6}
+A <- as_adjacency_matrix(g, sparse = FALSE)
+A
+```
+###Edge list
+
+```{r, warning=FALSE, message=FALSE, fig.height=4.6}
+el <- as_edgelist(g)
+el
+```
+
+##Standard structures
+There are a range of in-built structures 
+
+###Trees
+
+```{r, fig.height=4.6}
+g <- make_tree(27, children = 3)
+plot(g)
+```
+
+###Cliques
+
+```{r, fig.height=4.6}
+g <- make_full_graph(n = 6)
+plot(g)
+```
+
+###Lattices 
+
+```{r, fig.height=4.6}
+g <- make_lattice(dimvector = c(5, 5), circular = FALSE)
+plot(g)
+```
+
+###Stars
+
+```{r, fig.height=4.6}
+g <- make_star(n = 10, mode = "undirected")
+plot(g)
+```
+
+To create a start with 5 nodes and then convet the network to an adjency network
+
+```{r}
+g <- make_star(n = 5)
+a <- as_adjacency_matrix(g)
+a
+```
